@@ -54,13 +54,13 @@ public class TagService {
     }
 
     @Transactional(readOnly = true)
-    public TagResponse getTagById(String id, User user) {
+    public TagResponse getTagById(Long id, User user) {
         Tag tag = findTagAndCheckOwnership(id, user);
         return convertToResponse(tag);
     }
 
     @Transactional
-    public TagResponse updateTag(String id, TagRequest request, User user) {
+    public TagResponse updateTag(Long id, TagRequest request, User user) {
         Tag tag = findTagAndCheckOwnership(id, user);
         
         tagRepository.findByNameAndUser(request.getName(), user)
@@ -77,7 +77,7 @@ public class TagService {
     }
 
     @Transactional
-    public void deleteTag(String id, User user) {
+    public void deleteTag(Long id, User user) {
         Tag tag = findTagAndCheckOwnership(id, user);
         tagRepository.delete(tag);
     }
@@ -90,11 +90,11 @@ public class TagService {
     }
 
     @Transactional
-    public void deleteBulkTags(Set<String> ids, User user) {
+    public void deleteBulkTags(Set<Long> ids, User user) {
         ids.forEach(id -> deleteTag(id, user));
     }
 
-    private Tag findTagAndCheckOwnership(String id, User user) {
+    private Tag findTagAndCheckOwnership(Long id, User user) {
         Tag tag = tagRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Tag not found with id: " + id));
         

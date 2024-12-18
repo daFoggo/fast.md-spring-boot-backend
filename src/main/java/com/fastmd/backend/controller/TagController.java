@@ -41,14 +41,14 @@ public class TagController {
 
     @GetMapping("/{id}")
     public ResponseEntity<TagResponse> getTagById(
-            @PathVariable String id,
+            @PathVariable Long id,
             @AuthenticationPrincipal User user) {
         return ResponseEntity.ok(tagService.getTagById(id, user));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<TagResponse> updateTag(
-            @PathVariable String id,
+            @PathVariable Long id,
             @Valid @RequestBody TagRequest request,
             @AuthenticationPrincipal User user) {
         return ResponseEntity.ok(tagService.updateTag(id, request, user));
@@ -56,7 +56,7 @@ public class TagController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTag(
-            @PathVariable String id,
+            @PathVariable Long id,
             @AuthenticationPrincipal User user) {
         tagService.deleteTag(id, user);
         return ResponseEntity.noContent().build();

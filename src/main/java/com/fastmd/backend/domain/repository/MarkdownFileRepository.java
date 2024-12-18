@@ -9,7 +9,7 @@ import com.fastmd.backend.domain.entity.MarkdownFile;
 import com.fastmd.backend.domain.entity.User;
 
 @Repository
-public interface MarkdownFileRepository extends JpaRepository<MarkdownFile, String> {
+public interface MarkdownFileRepository extends JpaRepository<MarkdownFile, Long> {
     Page<MarkdownFile> findByUser(User user, Pageable pageable);
-    Page<MarkdownFile> findByNameContainingAndUser(String keyword, User user, Pageable pageable);
+    Page<MarkdownFile> findByTitleContainingAndUser(String title, User user, Pageable pageable);
 }

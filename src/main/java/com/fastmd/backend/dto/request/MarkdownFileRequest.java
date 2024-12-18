@@ -10,8 +10,8 @@ import lombok.Data;
 public class MarkdownFileRequest {
     @NotBlank(message = "Tên file không được để trống")
     @Size(max = 255, message = "Tên file không được quá 255 ký tự")
-    private String name;
+    private String title;
 
     private String content;
-    private Set<String> tagIds;
+    private Set<Long> tagIds;
 }

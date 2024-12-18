@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 public class TagResponse {
-    private String id;
+    private Long id;
     private String name;
     private String description;
     private LocalDateTime createdAt;

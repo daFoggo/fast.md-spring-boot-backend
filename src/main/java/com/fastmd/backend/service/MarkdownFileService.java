@@ -30,7 +30,7 @@ public class MarkdownFileService {
     @Transactional
     public MarkdownFileResponse createMarkdownFile(MarkdownFileRequest request, User user) {
         MarkdownFile markdownFile = new MarkdownFile();
-        markdownFile.setName(request.getName());
+        markdownFile.setTitle(request.getTitle());
         markdownFile.setContent(request.getContent());
         markdownFile.setUser(user);
 
@@ -53,21 +53,21 @@ public class MarkdownFileService {
 
     @Transactional(readOnly = true)
     public Page<MarkdownFileResponse> searchMarkdownFiles(String keyword, User user, Pageable pageable) {
-        return markdownFileRepository.findByNameContainingAndUser(keyword, user, pageable)
+        return markdownFileRepository.findByTitleContainingAndUser(keyword, user, pageable)
                 .map(this::convertToResponse);
     }
 
     @Transactional(readOnly = true)
-    public MarkdownFileResponse getMarkdownFileById(String id, User user) {
+    public MarkdownFileResponse getMarkdownFileById(Long id, User user) {
         MarkdownFile markdownFile = findFileAndCheckOwnership(id, user);
         return convertToResponse(markdownFile);
     }
 
     @Transactional
-    public MarkdownFileResponse updateMarkdownFile(String id, MarkdownFileRequest request, User user) {
+    public MarkdownFileResponse updateMarkdownFile(Long id, MarkdownFileRequest request, User user) {
         MarkdownFile markdownFile = findFileAndCheckOwnership(id, user);
 
-        markdownFile.setName(request.getName());
+        markdownFile.setTitle(request.getTitle());
         markdownFile.setContent(request.getContent());
 
         if (request.getTagIds() != null) {
@@ -82,12 +82,12 @@ public class MarkdownFileService {
     }
 
     @Transactional
-    public void deleteMarkdownFile(String id, User user) {
+    public void deleteMarkdownFile(Long id, User user) {
         MarkdownFile markdownFile = findFileAndCheckOwnership(id, user);
         markdownFileRepository.delete(markdownFile);
     }
 
-    private MarkdownFile findFileAndCheckOwnership(String id, User user) {
+    private MarkdownFile findFileAndCheckOwnership(Long id, User user) {
         MarkdownFile markdownFile = markdownFileRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy file với id: " + id));
 
@@ -101,9 +101,9 @@ public class MarkdownFileService {
     private MarkdownFileResponse convertToResponse(MarkdownFile markdownFile) {
         MarkdownFileResponse response = new MarkdownFileResponse();
         response.setId(markdownFile.getId());
-        response.setName(markdownFile.getName());
+        response.setTitle(markdownFile.getTitle());
         response.setContent(markdownFile.getContent());
-        response.setUserId(markdownFile.getUser().getId());
+        response.setUserId(markdownFile.getUser().getId().toString());
         response.setCreatedAt(markdownFile.getCreatedAt());
         response.setUpdatedAt(markdownFile.getUpdatedAt());
 

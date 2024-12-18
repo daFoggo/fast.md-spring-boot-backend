@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.fastmd.backend.domain.entity.User;
 import com.fastmd.backend.domain.repository.UserRepository;
+import com.fastmd.backend.dto.request.AuthRequest;
 import com.fastmd.backend.dto.request.UserRequest;
 import com.fastmd.backend.dto.response.UserResponse;
 import com.fastmd.backend.exception.DuplicateResourceException;
@@ -28,13 +29,12 @@ public class UserService {
         User user = new User();
         user.setUsername(request.getUsername());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setAvatar(request.getAvatar());
 
         return convertToResponse(userRepository.save(user));
     }
 
     @Transactional
-    public UserResponse updateUser(String id, UserRequest request) {
+    public UserResponse updateUser(Long id, UserRequest request) {
         User user = findUserById(id);
 
         if (!user.getUsername().equals(request.getUsername()) &&
@@ -52,7 +52,7 @@ public class UserService {
         return convertToResponse(userRepository.save(user));
     }
 
-    private User findUserById(String id) {
+    private User findUserById(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy người dùng với id: " + id));
     }

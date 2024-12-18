@@ -7,19 +7,24 @@ spring:
     url: ${SPRING_DATASOURCE_URL}
     username: ${SPRING_DATASOURCE_USERNAME}
     password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
     show-sql: true
   flyway:
+    enabled: false
     locations: classpath:db/migration
     baseline-on-migrate: true
 
 jwt:
   secret: ${SPRING_JWT_SECRET}
-  expiration: 86400000 # 24 hours in milliseconds
+  expiration: 86400000
 
 logging:
   level:
-    org.springframework.security: DEBUG
-    org.springframework.web: INFO
+    "[org.springframework.security]": DEBUG
+    "[org.springframework.web]": INFO

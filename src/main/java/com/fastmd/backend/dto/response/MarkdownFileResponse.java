@@ -7,8 +7,8 @@ import lombok.Data;
 
 @Data
 public class MarkdownFileResponse {
-    private String id;
-    private String name;
+    private Long id;
+    private String title;
     private String content;
     private Set<TagResponse> tags;
     private String userId;
