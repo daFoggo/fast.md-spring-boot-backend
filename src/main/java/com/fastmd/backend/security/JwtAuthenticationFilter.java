@@ -2,10 +2,15 @@ package com.fastmd.backend.security;
 
 import java.io.IOException;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+
+import com.fastmd.backend.domain.entity.User;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -26,13 +31,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             String jwt = getJwtFromRequest(request);
             logger.debug("JWT Token: " + jwt);
-
+            
             if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
-                Long userId = Long.valueOf(tokenProvider.getUserIdFromToken(jwt));
-                logger.debug("User ID from token: " + userId);
+                String username = tokenProvider.getUserIdFromToken(jwt);
+                logger.debug("Username from token: " + username);
+                
 
-                UserDetails userDetails = (UserDetails) userDetailsService.loadUserById(userId);
-                logger.debug("Loaded user details: " + userDetails);
+                User user = (User) userDetailsService.loadUserByUsername(username);
+                
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                        user, null, user.getAuthorities());
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception ex) {
             logger.error("Authentication error", ex);

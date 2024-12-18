@@ -1,5 +1,6 @@
 package com.fastmd.backend.dto.request;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.validation.constraints.NotBlank;
@@ -12,6 +13,6 @@ public class MarkdownFileRequest {
     @Size(max = 255, message = "Tên file không được quá 255 ký tự")
     private String title;
 
-    private String content;
-    private Set<Long> tagIds;
+private String content = ""; 
+    private Set<Long> tagIds = new HashSet<>(); 
 }

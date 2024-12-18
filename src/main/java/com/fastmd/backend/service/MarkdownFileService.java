@@ -29,10 +29,15 @@ public class MarkdownFileService {
 
     @Transactional
     public MarkdownFileResponse createMarkdownFile(MarkdownFileRequest request, User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("User cannot be null");
+        }
+        
         MarkdownFile markdownFile = new MarkdownFile();
         markdownFile.setTitle(request.getTitle());
         markdownFile.setContent(request.getContent());
         markdownFile.setUser(user);
+
 
         if (request.getTagIds() != null && !request.getTagIds().isEmpty()) {
             Set<Tag> tags = request.getTagIds().stream()
